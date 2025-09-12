@@ -1,0 +1,26 @@
+.sidebar {
+  width: 220px;
+  background: #2d333b;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px 0 0 24px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  border-right: 1px solid #444;
+  z-index: 30;
+}
+.title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 18px;
+  color: #fff;
+}
+.hr {
+  width: 90%;
+  border: none;
+  border-top: 1px solid #444;
+  margin: 16px 0;
+}

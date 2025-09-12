@@ -1,0 +1,52 @@
+.form {
+  position: fixed;
+  bottom: 30px;
+  left: 220px;
+  width: calc(100vw - 220px);
+  display: flex;
+  justify-content: center;
+  background: transparent;
+  z-index: 100;
+}
+.inputBar {
+  display: flex;
+  align-items: center;
+  background: #23272f;
+  border-radius: 22px;
+  box-shadow: 0 4px 24px #20202a80;
+  border: 1px solid #444;
+  width: 600px;
+  padding: 2px 10px 2px 18px;
+}
+.input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1.05rem;
+  color: #fff;
+  flex: 1;
+  padding: 11px 16px;
+}
+.file {
+  display: none;
+}
+.plus {
+  color: #a3a3a3;
+  font-size: 1.13rem;
+  font-weight: bold;
+  margin-right: 9px;
+}
+.mic {
+  background: #353aa8;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 9px;
+  cursor: pointer;
+}

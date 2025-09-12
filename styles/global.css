@@ -1,0 +1,11 @@
+body {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Arial', sans-serif;
+  background: #23272f !important;
+  color: #d1d5db;
+}
+
+* {
+  box-sizing: inherit;
+}

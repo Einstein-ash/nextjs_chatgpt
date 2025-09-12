@@ -1,103 +1,292 @@
-import Image from "next/image";
+// 'use client';
 
-export default function Home() {
+// import { useChat } from '@ai-sdk/react';
+// import React, { useState,
+//    useRef ,useCallback ,
+//      type ChangeEvent,
+
+
+// } from 'react';
+
+// export default function Chat() {
+
+//   interface Attachment {
+//   name: string;
+//   url: string;
+//   contentType: string;
+// }
+
+//   const [input, setInput] = useState('');
+//   const { messages, sendMessage } = useChat();
+//   const fileInputRef = useRef<HTMLInputElement>(null);
+//   const [uploadQueue, setUploadQueue] = useState<Array<string>>([]);
+//   const [attachments, setAttachments] = useState<Attachment[]>([]);
+
+//     const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+//     setInput(event.target.value);
+//   };
+
+//   const imageUrl = './test.jpg';
+
+
+
+//   const uploadFile = async (file: File) => {
+//     const formData = new FormData();
+//     formData.append('file', file);
+//     // console.log(file);
+
+//     try {
+//       const response = await fetch('/api/files/upload', {
+//         method: 'POST',
+//         body: formData,
+ 
+//       });
+
+
+//       console.log("before res.ok");
+
+//       if (response.ok) {
+//         const data = await response.json();
+//         const { url, pathname, contentType } = data;
+
+//         return {
+//           url,
+//           name: pathname,
+//           contentType: contentType,
+//         };
+//       }
+
+//       const { error } = await response.json();
+//       console.log("try errorr from upload file ", error);
+//       // toast.error(error);
+//       //  alert(' from try - Failed to upload file, please try again!')
+//     } catch (error) {
+//       alert('from catch = Failed to upload file, please try again!')
+//       // toast.error('Failed to upload file, please try again!');
+//     }
+//   };
+
+
+
+
+//     const handleFileChange = useCallback(
+//     async (event: ChangeEvent<HTMLInputElement>) => {
+//       const files = Array.from(event.target.files || []);
+
+//       setUploadQueue(files.map((file) => file.name));
+
+//       try {
+//         const uploadPromises = files.map((file) => uploadFile(file));
+//         const uploadedAttachments = await Promise.all(uploadPromises);
+//         const successfullyUploadedAttachments = uploadedAttachments.filter(
+//           (attachment) => attachment !== undefined,
+//         );
+
+//         setAttachments((currentAttachments) => [
+//           ...currentAttachments,
+//           ...successfullyUploadedAttachments,
+//         ]);
+//       } catch (error) {
+//         console.error('Error uploading files!', error);
+//       } finally {
+//         setUploadQueue([]);
+//       }
+//     },
+//     [setAttachments],
+//   );
+
+
+
+//   return (
+//     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
+//       {messages.map(message => (
+//         <div key={message.id} className="whitespace-pre-wrap">
+//           {message.role === 'user' ? 'User: ' : 'AI: '}
+//           {message.parts.map((part, i) => {
+//             switch (part.type) {
+//               case 'text':
+//                 return <div key={`${message.id}-${i}`}>{part.text}</div>;
+//             }
+//           })}
+//         </div>
+//       ))}
+
+//       <form
+
+
+//         onSubmit={async (e) => {
+//           e.preventDefault();
+//           // sendMessage({ text: input });
+
+//     sendMessage({
+//       role: 'user',
+//       parts: [
+//         ...attachments.map((attachment) => ({
+//           type: 'file' as const,
+//           url: attachment.url,
+//           name: attachment.name,
+//           mediaType: attachment.contentType,
+//         })),
+//         {
+//           type: 'text',
+//           text: input,
+//         },
+//       ],
+//     });
+
+
+//           setInput('');
+//         }}
+//       >
+
+//         <input
+//         className = "fixed dark:bg-zinc-900 bottom-20 w-60 max-w-md p-2 mb-8 border border-zinc-300 dark:border-zinc-800 rounded shadow-xl"
+//         type="file"
+//         ref={fileInputRef}
+//         multiple
+//         onChange={handleFileChange}
+//         tabIndex={-1}
+//       />
+
+
+//         <input
+//           className="fixed dark:bg-zinc-900 bottom-0 w-full max-w-md p-2 mb-8 border border-zinc-300 dark:border-zinc-800 rounded shadow-xl"
+//           value={input}
+//           placeholder="Say something..."
+//           onChange={e => setInput(e.currentTarget.value)}
+//         />
+
+//       </form>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use client';
+import React, { useState, useRef, useCallback, ChangeEvent } from 'react';
+import { useChat } from '@ai-sdk/react';
+
+import Sidebar from '../components/Sidebar/Sidebar.tsx';
+import Header from '../components/Header/Header.tsx';
+import ChatWindow from '../components/ChatWindow/ChatWindow.tsx';
+import ChatInput from '../components/ChatInput/ChatInput.tsx';
+
+import '../styles/global.css';
+
+export default function Chat() {
+  interface Attachment {
+    name: string;
+    url: string;
+    contentType: string;
+  }
+
+  const [input, setInput] = useState('');
+  const { messages, sendMessage } = useChat();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadQueue, setUploadQueue] = useState<Array<string>>([]);
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
+
+  const uploadFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/api/files/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const { url, pathname, contentType } = data;
+        return { url, name: pathname, contentType: contentType };
+      }
+      const { error } = await response.json();
+      alert('Upload error: ' + error);
+    } catch (error) {
+      alert('Upload failed! Please try again.');
+    }
+  };
+
+  const handleFileChange = useCallback(
+    async (event: ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(event.target.files || []);
+      setUploadQueue(files.map((file) => file.name));
+      try {
+        const uploadPromises = files.map((file) => uploadFile(file));
+        const uploadedAttachments = await Promise.all(uploadPromises);
+        const successfullyUploadedAttachments = uploadedAttachments.filter(
+          (attachment) => attachment !== undefined,
+        );
+        setAttachments((currentAttachments) => [
+          ...currentAttachments,
+          ...successfullyUploadedAttachments,
+        ]);
+      } catch (error) {
+        alert('Error uploading files!');
+      } finally {
+        setUploadQueue([]);
+      }
+    },
+    [],
+  );
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#23272f' }}>
+      <Sidebar />
+      <div style={{ flex: 1, marginLeft: 220 }}>
+        <Header />
+        <div style={{ marginTop: 56, marginBottom: 110, paddingLeft: 0 }}>
+          <ChatWindow messages={messages} />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <ChatInput
+          input={input}
+          setInput={setInput}
+          sendMessage={sendMessage}
+          fileInputRef={fileInputRef}
+          handleFileChange={handleFileChange}
+          attachments={attachments}
+        />
+      </div>
     </div>
   );
 }
