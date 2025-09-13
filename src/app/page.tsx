@@ -137,7 +137,7 @@ export default function Chat() {
   }
 
   const [input, setInput] = useState('');
-  const { messages, sendMessage } = useChat();
+  const { messages, sendMessage , setMessages} = useChat();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadQueue, setUploadQueue] = useState<Array<string>>([]);
   const [attachments, setAttachments] = useState<Attachment[]>([]);
@@ -202,13 +202,14 @@ export default function Chat() {
         {/* <Header /> */}
         <div style={{ marginTop: 0 ,paddingLeft: 0 }}>
           <ChatWindow
-           messages={messages} 
+           my_messages={messages} 
           input={input}
           setInput={setInput}
-          sendMessage={sendMessage}
+          my_sendMessage={sendMessage}
           fileInputRef={fileInputRef}
           handleFileChange={handleFileChange}
           attachments={attachments}
+          setMessages = {setMessages}
            />
         </div>
         {/* <ChatInput

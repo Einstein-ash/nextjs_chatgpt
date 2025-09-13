@@ -1,82 +1,10 @@
-// 'use client';
-// import styles from './ChatInput.module.css';
-// import React from 'react';
-
-// export default function ChatInput({
-//   input,
-//   setInput,
-//   sendMessage,
-//   fileInputRef,
-//   handleFileChange,
-//   attachments
-// }) {
-//   return (
-//     <form
-//       className={styles.form}
-//       onSubmit={async (e) => {
-//         e.preventDefault();
-//         sendMessage({
-//           role: 'user',
-//           parts: [
-//             ...attachments.map((attachment) => ({
-//               type: 'file',
-//               url: attachment.url,
-//               name: attachment.name,
-//               mediaType: attachment.contentType,
-//             })),
-//             {
-//               type: 'text',
-//               text: input,
-//             },
-//           ],
-//         });
-//         setInput('');
-//       }}
-//     >
-//       <input
-//         className={styles.file}
-//         type="file"
-//         ref={fileInputRef}
-//         multiple
-//         onChange={handleFileChange}
-//         tabIndex={-1}
-//       />
-//       <div className={styles.inputBar}>
-//         <span className={styles.plus}>+</span>
-//         <input
-//           className={styles.input}
-//           value={input}
-//           placeholder="Ask anything"
-//           onChange={(e) => setInput(e.currentTarget.value)}
-//         />
-//         <button type="submit" className={styles.mic}>
-//           <span role="img" aria-label="Send">🎤</span>
-//         </button>
-//       </div>
-//     </form>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // -----------below is working  very great =============
 
-import React, { useState } from "react";
+import { ChatInputProps, AddResponse, SearchResponse, MemoryResult } from "@/models/chat.model";
+import React, { ChangeEvent, useState } from "react";
 // import styles from "./ChatInput.module.css";
+import { FiSend } from 'react-icons/fi';
 
 const styles = `
 .chat-input__container {
@@ -210,60 +138,6 @@ const styles = `
 `;
 
 
-interface Attachment {
-  url: string;
-  name: string;
-  contentType: string;
-}
-
-interface ChatMessage {
-  role: string;
-  parts: Array<{
-    type: string;
-    text?: string;
-    url?: string;
-    name?: string;
-    mediaType?: string;
-  }>;
-}
-
-interface MemoryResult {
-  memory: string;
-  score?: number;
-  id?: string;
-  metadata?: Record<string, any>;
-}
-
-interface SearchResponse {
-  success: boolean;
-  results: MemoryResult[];
-  total: number;
-}
-
-interface AddResponse {
-  success: boolean;
-  result: any;
-  message: string;
-}
-
-// interface ChatInputProps {
-//   input: string;
-//   setInput: (input: string) => void;
-//   sendMessage: (message: ChatMessage) => void;
-//   fileInputRef: React.RefObject<HTMLInputElement>;
-//   handleFileChange: (e: ChangeEvent<HTMLInputElement>) => Promise<boolean>;
-//   attachments: Attachment[];
-// }
-
-interface ChatInputProps {
-  input: string;
-  setInput: (input: string) => void;
-  sendMessage: (message: ChatMessage) => void;
-  fileInputRef: React.RefObject<HTMLInputElement>;
-  handleFileChange: (e: ChangeEvent<HTMLInputElement>) => Promise<boolean>;
-  attachments: Attachment[];
-}
-
 
 export default function ChatInput({
   input,
@@ -272,7 +146,7 @@ export default function ChatInput({
   fileInputRef,
   handleFileChange,
   attachments,
-}: ChatInputProps) {
+}: Readonly<ChatInputProps>) {
   // Add this function to trigger file dialog
   const triggerFileInput = () => {
     if (fileInputRef.current) {
@@ -423,6 +297,7 @@ export default function ChatInput({
       <div className="chat-input__container">
         <form className="chat-input__form" onSubmit={handleSend}>
 
+
           {localUploadedFiles.length > 0 && (
             <div className="chat-input__image-grid">
               {localUploadedFiles.map((file, idx) => {
@@ -448,14 +323,15 @@ export default function ChatInput({
             </div>
           )}
 
+          
           <div className="chat-input__input-bar">
-            <span
+            <button
               className="chat-input__plus-button"
               onClick={triggerFileInput}
               title="Upload file" 
               >
               +
-            </span>
+            </button>
             <input
               className="chat-input__text-input"
               value={input}
@@ -467,9 +343,9 @@ export default function ChatInput({
               className="chat-input__send-button"
               disabled={(!input.trim() && attachments.length === 0) || uploadingStatus}
             >
-              <span role="img" aria-label="Send">
-                🎤
-              </span>
+              <div >
+                <FiSend />
+              </div>
             </button>
           </div>
 
@@ -485,6 +361,10 @@ export default function ChatInput({
       </div>
     </>
   );
+
+
+
+
 }
 
 

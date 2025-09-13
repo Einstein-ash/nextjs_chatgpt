@@ -69,7 +69,7 @@
   align-items: center;
   width: 100%;
   height : 90vh;
-  border : 4px solid green;
+  /* border : 4px solid green; */
   overflow-y: scroll;
 
 }
@@ -125,6 +125,13 @@
 
 .userMessage {
   background: rgb(48, 48, 48);
+  color: #fff;
+  align-self: flex-end;
+  text-align: right;
+}
+
+.userMessageEditBtn {
+  /* background: rgb(48, 48, 48); */
   color: #fff;
   align-self: flex-end;
   text-align: right;
