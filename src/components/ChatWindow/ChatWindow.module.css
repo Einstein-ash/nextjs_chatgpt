@@ -1,61 +1,6 @@
-/* .window {
-  flex: 1;
-  padding-top: 86px;
-  padding-bottom: 110px;
-  background: #23272f;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100vw;
-  min-width: 0;
-}
-.title {
-  font-size: 2.15rem;
-  font-weight: 540;
-  margin-bottom: 34px;
-  color: #fff;
-  text-align: center;
-}
-.messages {
-  width: 100%;
-  max-width: 640px;
-}
-.message {
-  background: #2d333b;
-  margin-bottom: 22px;
-  padding: 16px 20px;
-  border-radius: 14px;
-  color: #d1d5db;
-  font-size: 1.06rem;
-  word-break: break-word;
-}
-.role {
-  color: #6a6aff;
-  font-weight: bold;
-} */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* bwlos is wokring good,  */
+/* 
 .window {
   flex: 1;
   padding-top: 86px;
@@ -102,6 +47,84 @@
 }
 .userMessage {
   background: #4b7bec;
+  color: #fff;
+  align-self: flex-end;
+  text-align: right;
+} */
+
+
+
+/* ---------- aboe is working good,  */
+
+/* ----------- blwo is test to exact chat gpt ui ( working good ) stamp by ash ----------- */
+
+
+.window {
+  flex: 1;
+  padding-top: 80px;
+  padding-bottom: 110px;
+  background: rgb(33, 33, 33);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height : 90vh;
+  border : 4px solid green;
+  overflow-y: scroll;
+
+}
+
+.window::-webkit-scrollbar {
+  width: 10px;
+}
+
+.window::-webkit-scrollbar-track {
+  background: #1e1e1e; 
+}
+
+.window::-webkit-scrollbar-thumb {
+  background-color: #4d4d4d; 
+  border-radius: 40px;    
+  border: 2px solid #1e1e1e;
+}
+
+
+
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 24px;
+  color: #fff;
+  text-align: center;
+}
+
+.messages {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  max-width: 80%;
+  margin-bottom: 16px;
+  padding: 14px 18px;
+  border-radius: 30px;
+  font-size: 1rem;
+  word-break: break-word;
+  display: inline-block;
+}
+
+.aiMessage {
+  /* background: #343541; */
+  color: rgb(255, 255, 255);
+  align-self: flex-start;
+  text-align: left;
+}
+
+.userMessage {
+  background: rgb(48, 48, 48);
   color: #fff;
   align-self: flex-end;
   text-align: right;

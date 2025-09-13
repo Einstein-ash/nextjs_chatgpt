@@ -76,8 +76,138 @@
 // -----------below is working  very great =============
 
 import React, { useState } from "react";
-import styles from "./ChatInput.module.css";
+// import styles from "./ChatInput.module.css";
 
+const styles = `
+.chat-input__container {
+  position: fixed;
+  bottom: 0;
+  width: calc(100vw - 260px);
+  padding: 12px 24px;
+  // background: #000;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+  
+  .chat-input__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Space between grid and input bar */
+    width: 600px;
+  }
+
+  /* --- Image Grid Styles --- */
+  .chat-input__image-grid {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 5px; /* Add some space for scrollbar if it appears */
+    scrollbar-width: none; /* For Firefox */
+  }
+
+  .chat-input__image-grid::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+  }
+
+  .chat-input__image-wrapper {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #333;
+  }
+
+  .chat-input__preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.3s ease-in-out;
+  }
+
+  .chat-input__preview-image--blur {
+    filter: blur(4px);
+  }
+
+  /* --- Spinner Overlay Styles --- */
+  .chat-input__spinner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .chat-input__spinner {
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-left-color: #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: chat-input-spin 1s linear infinite;
+  }
+
+  @keyframes chat-input-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* --- Input Bar Styles (Your Theme) --- */
+  .chat-input__input-bar {
+    display: flex;
+    align-items: center;
+    background: rgb(48, 48, 48);
+    border-radius: 22px;
+    box-shadow: 0 4px 24px #20202a80;
+    border: 1px solid #444;
+    width: 100%;
+    padding: 2px 10px 2px 18px;
+  }
+
+  .chat-input__text-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1.05rem;
+    color: #fff;
+    flex: 1;
+    padding: 11px 16px;
+  }
+
+  .chat-input__plus-button {
+    color: #a3a3a3;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-right: 9px;
+    cursor: pointer;
+  }
+  
+  .chat-input__send-button {
+    background: #353aa8;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 9px;
+    cursor: pointer;
+    flex-shrink: 0; /* Prevent button from shrinking */
+  }
+`;
 
 
 interface Attachment {
@@ -116,6 +246,15 @@ interface AddResponse {
   message: string;
 }
 
+// interface ChatInputProps {
+//   input: string;
+//   setInput: (input: string) => void;
+//   sendMessage: (message: ChatMessage) => void;
+//   fileInputRef: React.RefObject<HTMLInputElement>;
+//   handleFileChange: (e: ChangeEvent<HTMLInputElement>) => Promise<boolean>;
+//   attachments: Attachment[];
+// }
+
 interface ChatInputProps {
   input: string;
   setInput: (input: string) => void;
@@ -133,7 +272,7 @@ export default function ChatInput({
   fileInputRef,
   handleFileChange,
   attachments,
-}) {
+}: ChatInputProps) {
   // Add this function to trigger file dialog
   const triggerFileInput = () => {
     if (fileInputRef.current) {
@@ -187,7 +326,6 @@ export default function ChatInput({
     }
   };
 
-  // Search memories from Mem0
   const searchMemories = async (query: string, limit: number = 5): Promise<string> => {
     try {
       const response = await fetch("/api/memory/search", {
@@ -221,51 +359,6 @@ export default function ChatInput({
   };
 
 
-  // const handleSend = async (e) => {
-  //   e.preventDefault();
-
-  //   await fetch("/api/memory/add", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({
-  //       userId: USER_ID,
-  //       memory: { role: "user", content: input },
-  //     }),
-  //   });
-
-  //   // Search memories
-  //   const response = await fetch("/api/memory/search", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ userId: USER_ID , query : input}),
-  //   });
-
-  //   const memories = await response.json();
-  //   const contextText = memories.map((m) => m.content).join("\n");
-
-  //   setLocalUploadedFiles([]);
-
-  //   sendMessage({
-  //     role: "user",
-  //     parts: [
-  //       ...attachments.map((attachment) => ({
-  //         type: "file",
-  //         url: attachment.url,
-  //         name: attachment.name,
-  //         mediaType: attachment.contentType,
-  //       })),
-  //       {
-  //         type: "text",
-  //         text:  contextText + '\n' + input,
-  //         // text: input,
-  //       },
-  //     ],
-  //   });
-  //   setInput("");
-  // };
-
-
-
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -274,20 +367,20 @@ export default function ChatInput({
     // setIsSubmitting(true);
 
     try {
-      const addSuccess = await addMemory({ 
-        role: "user", 
-        content: input.trim() 
-      });
+      // const addSuccess = await addMemory({ 
+      //   role: "user", 
+      //   content: input.trim() 
+      // });
 
-      if (!addSuccess) {
-        console.warn("Failed to add memory, but continuing...");
-      }
+      // if (!addSuccess) {
+      //   console.warn("Failed to add memory, but continuing...");
+      // }
 
-      const contextText = await searchMemories(input.trim());
+      // const contextText = await searchMemories(input.trim());
 
-      const finalText = contextText 
-        ? `${contextText}\n\n${input.trim()}`
-        : input.trim();
+      // const finalText = contextText 
+      //   ? `${contextText}\n\n${input.trim()}`
+      //   : input.trim();
 
  
       setLocalUploadedFiles([]);
@@ -305,8 +398,8 @@ export default function ChatInput({
 
           {
             type: "text",
-            // text: input,
-            text: finalText,
+            text: input,
+            // text: finalText,
           },
         ],
       });
@@ -321,349 +414,79 @@ export default function ChatInput({
     }
   };
 
-
-
-
-
-
-
-
-
+  
+  
+  
   return (
-    <form className={styles.form} onSubmit={handleSend}>
-      {uploadingStatus ? "Loading..." : ""}
+    <>
+      <style>{styles}</style>
+      <div className="chat-input__container">
+        <form className="chat-input__form" onSubmit={handleSend}>
 
-      {uploadingStatus && (
-        <div className={styles.loadingOverlay}>
-          <div className={styles.spinner}></div>
-        </div>
-      )}
-
-      <div className={styles.imageGrid}>
-        {localUploadedFiles.map((file, idx) => {
-          const imageURL = URL.createObjectURL(file);
-          return (
-            <div
-              key={idx}
-              className={
-                uploadingStatus ? styles.imageWrapperBlur : styles.imageWrapper
-              }
-            >
-              <img className="imgss" src={imageURL} alt={`upload-${idx}`} />
+          {localUploadedFiles.length > 0 && (
+            <div className="chat-input__image-grid">
+              {localUploadedFiles.map((file, idx) => {
+                const imageURL = URL.createObjectURL(file);
+                return (
+                  <div key={idx} className="chat-input__image-wrapper">
+                    <img
+                      className={`chat-input__preview-image ${
+                        uploadingStatus ? "chat-input__preview-image--blur" : ""
+                      }`}
+                      src={imageURL}
+                      alt={`upload-preview-${idx}`}
+                      onLoad={() => URL.revokeObjectURL(imageURL)}
+                      />
+                    {uploadingStatus && (
+                      <div className="chat-input__spinner-overlay">
+                        <div className="chat-input__spinner"></div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
-      </div>
+          )}
 
-      <input
-        className={styles.file}
-        type="file"
-        ref={fileInputRef}
-        multiple
-        onChange={handleFileUpload}
-        tabIndex={-1}
-      />
-      <div className={styles.inputBar}>
-        {/* Make "+" icon call triggerFileInput() */}
-        <span
-          className={styles.plus}
-          onClick={triggerFileInput}
-          style={{ cursor: "pointer" }}
-          title="Upload file"
-        >
-          +
-        </span>
-        <input
-          className={styles.input}
-          value={input}
-          placeholder="Ask anything"
-          onChange={(e) => setInput(e.currentTarget.value)}
-        />
-        <button type="submit" className={styles.mic}>
-          <span role="img" aria-label="Send">
-            🎤
-          </span>
-        </button>
+          <div className="chat-input__input-bar">
+            <span
+              className="chat-input__plus-button"
+              onClick={triggerFileInput}
+              title="Upload file" 
+              >
+              +
+            </span>
+            <input
+              className="chat-input__text-input"
+              value={input}
+              placeholder="Ask anything"
+              onChange={(e) => setInput(e.currentTarget.value)}
+              />
+            <button 
+              type="submit" 
+              className="chat-input__send-button"
+              disabled={(!input.trim() && attachments.length === 0) || uploadingStatus}
+            >
+              <span role="img" aria-label="Send">
+                🎤
+              </span>
+            </button>
+          </div>
+
+          <input
+            style={{ display: "none" }}
+            type="file"
+            ref={fileInputRef}
+            multiple
+            onChange={handleFileUpload}
+            accept="image/*,video/*,application/pdf"
+            />
+        </form>
       </div>
-    </form>
+    </>
   );
 }
 
 
-
-// -------------above is working bery very great ---------------
-// bewpw os test for memo to work 
-
-
-// import React, { useState, ChangeEvent } from "react";
-// import styles from "./ChatInput.module.css";
-
-// interface Attachment {
-//   url: string;
-//   name: string;
-//   contentType: string;
-// }
-
-// interface ChatMessage {
-//   role: string;
-//   parts: Array<{
-//     type: string;
-//     text?: string;
-//     url?: string;
-//     name?: string;
-//     mediaType?: string;
-//   }>;
-// }
-
-// interface MemoryResult {
-//   memory: string;
-//   score?: number;
-//   id?: string;
-//   metadata?: Record<string, any>;
-// }
-
-// interface SearchResponse {
-//   success: boolean;
-//   results: MemoryResult[];
-//   total: number;
-// }
-
-// interface AddResponse {
-//   success: boolean;
-//   result: any;
-//   message: string;
-// }
-
-// interface ChatInputProps {
-//   input: string;
-//   setInput: (input: string) => void;
-//   sendMessage: (message: ChatMessage) => void;
-//   fileInputRef: React.RefObject<HTMLInputElement>;
-//   handleFileChange: (e: ChangeEvent<HTMLInputElement>) => Promise<boolean>;
-//   attachments: Attachment[];
-// }
-
-// export default function ChatInput({
-//   input,
-//   setInput,
-//   sendMessage,
-//   fileInputRef,
-//   handleFileChange,
-//   attachments,
-// }: ChatInputProps) {
-//   const [uploadingStatus, setUploadingStatus] = useState<boolean>(false);
-//   const [localUploadedFiles, setLocalUploadedFiles] = useState<File[]>([]);
-//   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
-//   const USER_ID = "customer-001"; // Should be unique per user
-
-//   // Trigger file dialog
-//   const triggerFileInput = () => {
-//     if (fileInputRef.current) {
-//       fileInputRef.current.click();
-//     }
-//   };
-
-//   // Handle file upload
-//   const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-//     const files = Array.from(e.target.files || []);
-//     setLocalUploadedFiles(files);
-//     setUploadingStatus(true);
-
-//     try {
-//       const result = await handleFileChange(e);
-//       if (!result) {
-//         alert("File upload failed.");
-//       }
-//     } catch (error) {
-//       console.error("File upload error:", error);
-//       alert("File upload failed.");
-//     } finally {
-//       setUploadingStatus(false);
-//     }
-//   };
-
-//   // Add memory to Mem0
-//   const addMemory = async (memory: { role: string; content: string }) => {
-//     try {
-//       const response = await fetch("/api/memory/add", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({
-//           userId: USER_ID,
-//           memory,
-//         }),
-//       });
-
-//       if (!response.ok) {
-//         throw new Error(`HTTP error! status: ${response.status}`);
-//       }
-
-//       const result: AddResponse = await response.json();
-//       return result.success;
-//     } catch (error) {
-//       console.error("Failed to add memory:", error);
-//       return false;
-//     }
-//   };
-
-//   // Search memories from Mem0
-//   const searchMemories = async (query: string, limit: number = 5): Promise<string> => {
-//     try {
-//       const response = await fetch("/api/memory/search", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ 
-//           userId: USER_ID, 
-//           query, 
-//           limit 
-//         }),
-//       });
-
-//       if (!response.ok) {
-//         throw new Error(`HTTP error! status: ${response.status}`);
-//       }
-
-//       const data: SearchResponse = await response.json();
-      
-//       if (data.success && Array.isArray(data.results)) {
-//         return data.results
-//           .map((m: MemoryResult) => m.memory)
-//           .filter(Boolean)
-//           .join("\n");
-//       }
-      
-//       return "";
-//     } catch (error) {
-//       console.error("Failed to search memories:", error);
-//       return "";
-//     }
-//   };
-
-//   // Handle message send
-//   const handleSend = async (e: React.FormEvent) => {
-//     e.preventDefault();
-    
-//     if (!input.trim() || isSubmitting) return;
-    
-//     setIsSubmitting(true);
-
-//     try {
-//       // 1. Add current user message to memory
-//       const addSuccess = await addMemory({ 
-//         role: "user", 
-//         content: input.trim() 
-//       });
-
-//       if (!addSuccess) {
-//         console.warn("Failed to add memory, but continuing...");
-//       }
-
-//       // 2. Search for relevant memories
-//       const contextText = await searchMemories(input.trim());
-
-//       // 3. Prepare the final message text
-//       const finalText = contextText 
-//         ? `${contextText}\n\n${input.trim()}`
-//         : input.trim();
-
-//       // 4. Clear local state
-//       setLocalUploadedFiles([]);
-
-//       // 5. Send message with context and attachments
-//       sendMessage({
-//         role: "user",
-//         parts: [
-//           // Add file attachments
-//           ...attachments.map((attachment) => ({
-//             type: "file",
-//             url: attachment.url,
-//             name: attachment.name,
-//             mediaType: attachment.contentType,
-//           })),
-//           // Add text with context
-//           {
-//             type: "text",
-//             text: finalText,
-//           },
-//         ],
-//       });
-
-//       // 6. Clear input
-//       setInput("");
-//     } catch (error) {
-//       console.error("Error sending message:", error);
-//       alert("Failed to send message. Please try again.");
-//     } finally {
-//       setIsSubmitting(false);
-//     }
-//   };
-
-//   return (
-//     <div className={styles.container}>
-//       <form onSubmit={handleSend} className={styles.form}>
-//         <div className={styles.inputContainer}>
-//           {/* File input (hidden) */}
-//           <input
-//             ref={fileInputRef}
-//             type="file"
-//             onChange={handleFileUpload}
-//             style={{ display: "none" }}
-//             multiple
-//             accept="image/*,application/pdf,.doc,.docx,.txt"
-//           />
-          
-//           {/* Attach button */}
-//           <button
-//             type="button"
-//             onClick={triggerFileInput}
-//             className={styles.attachButton}
-//             disabled={uploadingStatus}
-//             title="Attach files"
-//           >
-//             {uploadingStatus ? "📤" : "📎"}
-//           </button>
-          
-//           {/* Text input */}
-//           <input
-//             type="text"
-//             value={input}
-//             onChange={(e) => setInput(e.target.value)}
-//             placeholder="Type your message..."
-//             className={styles.textInput}
-//             disabled={isSubmitting || uploadingStatus}
-//           />
-          
-//           {/* Send button */}
-//           <button
-//             type="submit"
-//             className={styles.sendButton}
-//             disabled={!input.trim() || isSubmitting || uploadingStatus}
-//             title="Send message"
-//           >
-//             {isSubmitting ? "⏳" : "➤"}
-//           </button>
-//         </div>
-        
-//         {/* File upload status */}
-//         {localUploadedFiles.length > 0 && (
-//           <div className={styles.uploadStatus}>
-//             <p>Files: {localUploadedFiles.map(f => f.name).join(", ")}</p>
-//             {uploadingStatus && <p>Uploading...</p>}
-//           </div>
-//         )}
-        
-//         {/* Attachments preview */}
-//         {attachments.length > 0 && (
-//           <div className={styles.attachments}>
-//             {attachments.map((attachment, index) => (
-//               <div key={index} className={styles.attachment}>
-//                 <span>{attachment.name}</span>
-//               </div>
-//             ))}
-//           </div>
-//         )}
-//       </form>
-//     </div>
-//   );
-// }
+// abovce reutnr is working good, 
+// -------- below is just to test the uplaodn image grid

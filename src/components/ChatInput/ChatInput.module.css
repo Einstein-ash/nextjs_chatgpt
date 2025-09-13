@@ -111,3 +111,147 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* -------------above is good for normal intpu vox, but not the image grid */
+
+/* --------below is wtest to enghanve image grid above input booc */
+
+
+.chat-input__container {
+    position: fixed;
+    bottom: 30px;
+    left: 220px;
+    width: calc(100vw - 220px);
+    display: flex;
+    justify-content: center;
+    z-index: 100;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  .chat-input__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Space between grid and input bar */
+    width: 600px;
+  }
+
+  /* --- Image Grid Styles --- */
+  .chat-input__image-grid {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 5px; /* Add some space for scrollbar if it appears */
+    scrollbar-width: none; /* For Firefox */
+  }
+
+  .chat-input__image-grid::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+  }
+
+  .chat-input__image-wrapper {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #333;
+  }
+
+  .chat-input__preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.3s ease-in-out;
+  }
+
+  .chat-input__preview-image--blur {
+    filter: blur(4px);
+  }
+
+  /* --- Spinner Overlay Styles --- */
+  .chat-input__spinner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .chat-input__spinner {
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-left-color: #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: chat-input-spin 1s linear infinite;
+  }
+
+  @keyframes chat-input-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* --- Input Bar Styles (Your Theme) --- */
+  .chat-input__input-bar {
+    display: flex;
+    align-items: center;
+    background: #23272f;
+    border-radius: 22px;
+    box-shadow: 0 4px 24px #20202a80;
+    border: 1px solid #444;
+    width: 100%;
+    padding: 2px 10px 2px 18px;
+  }
+
+  .chat-input__text-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1.05rem;
+    color: #fff;
+    flex: 1;
+    padding: 11px 16px;
+  }
+
+  .chat-input__plus-button {
+    color: #a3a3a3;
+    font-size: 1.13rem;
+    font-weight: bold;
+    margin-right: 9px;
+    cursor: pointer;
+  }
+  
+  .chat-input__send-button {
+    background: #353aa8;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 9px;
+    cursor: pointer;
+    flex-shrink: 0; /* Prevent button from shrinking */
+  }
