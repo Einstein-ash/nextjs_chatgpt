@@ -9,10 +9,10 @@ import { FiSend } from 'react-icons/fi';
 import { ChatMessage2, ChatWindowProps } from '@/models/chat.model';
 
 export default function ChatWindow({
-  my_messages ,
+  messages ,
   input,
   setInput,
-  my_sendMessage,
+  sendMessage,
   fileInputRef,
   handleFileChange,
   attachments, 
@@ -36,25 +36,26 @@ export default function ChatWindow({
     console.log("id->",id)
   
     // setMessages(my_messages.filter(message => message.id !== id));
-    setMessages((my_messages : ChatMessage2[] ) => {
-      const index = my_messages.findIndex((message) => message.id === id);
-      if (index === -1) return my_messages; 
-      return my_messages.slice(0, index);
+    setMessages((messages : ChatMessage2[] ) => {
+      const index = messages.findIndex((message) => message.id === id);
+      if (index === -1) return messages; 
+      return messages.slice(0, index);
     });
 
       setEditMessageId(null);
 
-       my_sendMessage({
-        role: "user",
-        parts: [
-          {
-            type: "text",
-            text: newEditMessageText,
-          },
-        ],
-      });
+       sendMessage({
+         role: "user",
+         parts: [
+           {
+             type: "text",
+             text: newEditMessageText,
+           },
+         ],
+         id: 0
+       });
 
-    console.log(my_messages);
+    console.log(messages);
 
   }
 
@@ -64,7 +65,7 @@ export default function ChatWindow({
     <main className={styles.window}>
       <h1 className={styles.title}>What's on your mind today?</h1>
       <div className={styles.messages}>
-        {my_messages.map((message) => (
+        {messages.map((message) => (
           
           <>
           
@@ -101,7 +102,7 @@ export default function ChatWindow({
                )
                :(
                 <div>
-                  <button onClick={() => handleMessageInputEdit(message.id , message.parts[0].text)}> <FaPencilAlt /></button>
+                  <button onClick={() => handleMessageInputEdit(message.id , message.parts[0].text ?? '')}> <FaPencilAlt /></button>
                 </div>
                ))
             }
@@ -111,7 +112,7 @@ export default function ChatWindow({
         ))}
 
 
-      {my_messages.length > 0 && my_messages[my_messages.length - 1].role === 'user' ? (
+      {messages.length > 0 && messages[messages.length - 1].role === 'user' ? (
         <div className={styles.message}>
           <span className={styles.role}> </span>
           <LoadingDots />
@@ -127,7 +128,7 @@ export default function ChatWindow({
       <ChatInput
                 input={input}
                 setInput={setInput}
-                sendMessage={my_sendMessage}
+                sendMessage={sendMessage}
                 fileInputRef={fileInputRef}
                 handleFileChange={handleFileChange}
                 attachments={attachments}

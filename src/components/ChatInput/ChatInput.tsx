@@ -1,5 +1,4 @@
 
-// -----------below is working  very great =============
 
 import { ChatInputProps, AddResponse, SearchResponse, MemoryResult } from "@/models/chat.model";
 import React, { ChangeEvent, useState } from "react";
@@ -15,7 +14,7 @@ const styles = `
   // background: #000;
   display: flex;
   justify-content: center;
-  z-index: 100;
+  z-index: 20;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
   
@@ -120,21 +119,52 @@ const styles = `
     cursor: pointer;
   }
   
-  .chat-input__send-button {
-    background: #353aa8;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    font-size: 1.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 9px;
-    cursor: pointer;
-    flex-shrink: 0; /* Prevent button from shrinking */
-  }
+
+.chat-input__send-button {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  
+  /* Appearance */
+  background-color: white;
+  border: none;
+  border-radius: 50%; 
+  
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+ 
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  flex-shrink: 0;
+}
+
+
+.chat-input__send-button svg {
+  color: #1d1d1f; 
+}
+
+
+.chat-input__send-button:hover {
+  background-color: #f5f5f7;
+}
+
+
+.chat-input__send-button:active {
+  transform: scale(0.92);
+}
+
+
+.chat-input__send-button:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.chat-input__send-button:disabled svg {
+  color: #888; 
+}
 `;
 
 
@@ -147,7 +177,6 @@ export default function ChatInput({
   handleFileChange,
   attachments,
 }: Readonly<ChatInputProps>) {
-  // Add this function to trigger file dialog
   const triggerFileInput = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -157,7 +186,7 @@ export default function ChatInput({
   const [uploadingStatus, setUploadingStatus] = useState<boolean>(false);
   const [localUploadedFiles, setLocalUploadedFiles] = useState<File[]>([]);
 
-  const USER_ID = "customer-001"; // Should be unique per user
+  const USER_ID = "customer-001"; 
 
 
 
@@ -264,6 +293,7 @@ export default function ChatInput({
         role: "user",
         parts: [
           ...attachments.map((attachment) => ({
+             text: "",
             type: "file",
             url: attachment.url,
             name: attachment.name,
@@ -276,6 +306,7 @@ export default function ChatInput({
             // text: finalText,
           },
         ],
+        id: 0
       });
 
 
@@ -329,6 +360,7 @@ export default function ChatInput({
               className="chat-input__plus-button"
               onClick={triggerFileInput}
               title="Upload file" 
+               type="button"
               >
               +
             </button>
@@ -343,21 +375,31 @@ export default function ChatInput({
               className="chat-input__send-button"
               disabled={(!input.trim() && attachments.length === 0) || uploadingStatus}
             >
-              <div >
-                <FiSend />
-              </div>
+          <svg 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2.5" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="M12 19V5M5 12l7-7 7 7" />
+          </svg>
             </button>
           </div>
 
-          <input
-            style={{ display: "none" }}
-            type="file"
-            ref={fileInputRef}
-            multiple
-            onChange={handleFileUpload}
-            accept="image/*,video/*,application/pdf"
-            />
+         
         </form>
+         <input
+                style={{ display: "none" }}
+                type="file"
+                ref={fileInputRef}
+                multiple
+                onChange={handleFileUpload}
+                accept="image/*,video/*,application/pdf"
+            />
       </div>
     </>
   );
