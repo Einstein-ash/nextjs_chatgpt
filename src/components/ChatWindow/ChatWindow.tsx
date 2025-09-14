@@ -34,8 +34,6 @@ export default function ChatWindow({
   }
 
   const handleMessageEdit = (id : string)=>{
-    console.log("id->",id)
-  
     // setMessages(my_messages.filter(message => message.id !== id));
     setMessages((messages  ) => {
       const index = messages.findIndex((message) => message.id === id);
@@ -53,10 +51,7 @@ export default function ChatWindow({
              text: newEditMessageText,
            },
          ],
-         id: 0
        });
-
-    console.log(messages);
 
   }
 
@@ -66,7 +61,6 @@ const messagesEndRef = useRef<HTMLDivElement>(null);
 // Add the auto-scroll effect
 useEffect(() => {
   messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  console.log(messages);
 }, [messages]);
 
 
@@ -82,7 +76,7 @@ useEffect(() => {
 
 
       <div className={styles.messages}>
-        {messages.map((message: { id: number; role: string; parts: any[]; }) => (
+        {messages.map((message: { id: string; role: string; parts: any[]; }) => (
           
           <>
           
@@ -92,8 +86,9 @@ useEffect(() => {
               message.role === 'user' ? styles.userMessage : styles.aiMessage
             }`}
             >
-              
-          {message.id == parseInt(editMessageId) ? (
+            
+
+          {message.id === editMessageId ? (
             <div>
               <textarea
                 value={newEditMessageText}
@@ -109,10 +104,9 @@ useEffect(() => {
           )}
 
           </div>
-
            <div className={styles.userMessageEditBtn}>
               {message.role === 'user' &&
-               (parseInt(editMessageId)  === message.id ? (
+               (editMessageId  == message.id ? (
                  <button onClick={() => handleMessageEdit((message.id).toString())}>   <FiSend /></button>
                )
                :(

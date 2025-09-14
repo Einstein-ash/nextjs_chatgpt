@@ -352,7 +352,6 @@ export default function ChatInput({
             // text: finalText,
           },
         ],
-        id: 0
       });
 
 

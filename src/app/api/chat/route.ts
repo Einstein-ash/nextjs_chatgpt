@@ -5,11 +5,9 @@ import { streamText, UIMessage, convertToModelMessages } from "ai";
 export const maxDuration = 30;
 
 export async function POST(req : Request) {
-  console.log("choco2");
   try {
     const { messages }: { messages: UIMessage[] } = await req.json();
 
-    console.log("choco1");
 
     const result = streamText({
       // model: openai('4o-mini'),

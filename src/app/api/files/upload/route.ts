@@ -2,7 +2,6 @@ import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
-  console.log('Came to api/files/upload');
 
   try {
     const formData = await request.formData();
@@ -38,13 +37,11 @@ export async function POST(request: Request) {
     const filename = file.name;
     const fileBuffer = await file.arrayBuffer();
 
-    console.log("Uploading file to Vercel Blob...");
     const blob = await put(filename, fileBuffer, {
       access: 'public',
       allowOverwrite: true,
     });
 
-    console.log("Upload successful:", blob.url);
     
     return NextResponse.json(blob);
 
