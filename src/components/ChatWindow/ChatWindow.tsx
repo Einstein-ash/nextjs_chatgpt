@@ -81,7 +81,7 @@ export default function ChatWindow({
         <div
           className={`flex-1 overflow-y-auto px-6 pt-1 pb-10 ${styles.scrollableArea}`}
         >
-          <h1 className={styles.title}>What &apos; s on your mind today?</h1>
+          <h1 className={styles.title}>What&apos;s on your mind today?</h1>
 
           <div className={styles.messages}>
             {messages.map(
