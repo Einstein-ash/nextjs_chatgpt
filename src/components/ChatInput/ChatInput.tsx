@@ -370,7 +370,6 @@ const getFileTypeLabel = (mimeType: string): string => {
   if (mimeType === 'application/pdf') return 'PDF';
   if (mimeType.includes('wordprocessingml')) return 'DOCX'; 
   if (mimeType === 'application/msword') return 'DOC'; 
-  // You can add more types here
   return 'File';
 };
   

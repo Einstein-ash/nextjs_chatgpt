@@ -84,7 +84,7 @@ const messagesEndRef = useRef<HTMLDivElement>(null);
 
 
 useEffect(() => {
-  messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
 }, [messages]);
 
 
@@ -94,7 +94,7 @@ useEffect(() => {
 
         <div className="flex h-full flex-col overflow-hidden">
     
-<div className="flex-1 overflow-y-auto px-6 pt-1 pb-10">
+<div className={`flex-1 overflow-y-auto px-6 pt-1 pb-10 ${styles.scrollableArea}`}>
       <h1 className={styles.title}>What &apos; s on your mind today?</h1>
 
 
@@ -173,7 +173,7 @@ useEffect(() => {
                             {part.text}
                           </ReactMarkdown>
                         </div>
-
+// -------------------------------------------
               ) : null
             )
           )}

@@ -12,7 +12,7 @@
 
 }
 
-.window::-webkit-scrollbar {
+/* .window::-webkit-scrollbar {
   width: 10px;
 }
 
@@ -24,7 +24,24 @@
   background-color: #4d4d4d; 
   border-radius: 40px;    
   border: 2px solid #1e1e1e;
+} */
+
+
+
+.scrollableArea::-webkit-scrollbar {
+  width: 10px;
 }
+
+.scrollableArea::-webkit-scrollbar-track {
+  background: #1e1e1e; 
+}
+
+.scrollableArea::-webkit-scrollbar-thumb {
+  background-color: #4d4d4d; 
+  border-radius: 40px;    
+  border: 2px solid #1e1e1e;
+}
+
 
 
 
