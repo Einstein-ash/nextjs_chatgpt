@@ -8,6 +8,7 @@ import { FaPencilAlt } from 'react-icons/fa';
 import { FiSend } from 'react-icons/fi';
 import { ChatMessage2, ChatWindowProps } from '@/models/chat.model';
 
+
 export default function ChatWindow({
   messages ,
   input,
@@ -59,7 +60,7 @@ export default function ChatWindow({
 
   }
 
-// Add a ref for the bottom of the message list
+
 const messagesEndRef = useRef<HTMLDivElement>(null);
 
 // Add the auto-scroll effect
@@ -104,8 +105,6 @@ useEffect(() => {
             )
           )}
 
-
-
           </div>
 
            <div className={styles.userMessageEditBtn}>
@@ -141,14 +140,14 @@ useEffect(() => {
         </div>
       </div>
 
-      <ChatInput
+      {/* <ChatInput
                 input={input}
                 setInput={setInput}
                 sendMessage={sendMessage}
                 fileInputRef={fileInputRef}
                 handleFileChange={handleFileChange}
                 attachments={attachments}
-      />
+      /> */}
     </main>
   );
 }

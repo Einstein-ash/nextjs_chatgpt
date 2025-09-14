@@ -9,6 +9,7 @@ import Header from '../components/Header/Header';
 import { FaBars , FaTimes } from 'react-icons/fa'; 
 
 import '../styles/global.css';
+import ChatInput from '@/components/ChatInput/ChatInput';
 
 
 export default function Chat() {
@@ -114,6 +115,15 @@ export default function Chat() {
           handleFileChange={handleFileChange}
           attachments={attachments}
            />
+
+                 <ChatInput
+                           input={input}
+                           setInput={setInput}
+                           sendMessage={sendMessage}
+                           fileInputRef={fileInputRef}
+                           handleFileChange={handleFileChange}
+                           attachments={attachments}
+                 />
         </div>
 
       </div>

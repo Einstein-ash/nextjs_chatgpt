@@ -6,23 +6,23 @@ import { FiSend } from 'react-icons/fi';
 
 const styles = `
 .chat-input__container {
-  position: fixed;
-  bottom: 0;
-  width: calc(100vw - 260px);
-  padding: 12px 24px;
-  // background: #000;
-  display: flex;
-  justify-content: center;
-  z-index: 20;
+  width: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
   
   .chat-input__form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px; /* Space between grid and input bar */
-    width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  width: 80%;          
+ 
+  // widht : 200px;
+  max-width: 700px;        
+  margin-left: auto;    
+  margin-right: auto;   
+   
   }
 
   /* --- Image Grid Styles --- */
