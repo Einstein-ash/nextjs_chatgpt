@@ -43,6 +43,7 @@ export default function ChatWindow({
 }: Readonly<ChatWindowProps>) {
   const [editMessageId, setEditMessageId] = useState<string>("");
   const [newEditMessageText, setNewEditMessageText] = useState<string>("");
+    const [copiedMessageId, setCopiedMessageId] = useState<string>("");
 
   const handleMessageInputEdit = (id: string, original_message: string) => {
     setEditMessageId(id);
@@ -74,6 +75,12 @@ export default function ChatWindow({
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
   }, [messages]);
+
+    const handleCopyMessage = (text: string) => {
+    navigator.clipboard.writeText(text).catch((err) => {
+      console.error("Failed to copy text: ", err);
+    });
+  };
 
   return (
     <main className={styles.window}>
@@ -135,20 +142,33 @@ export default function ChatWindow({
                           <FiSend />
                         </button>
                       ) : (
-                        <div>
-                          <button
-                            onClick={() =>
-                              handleMessageInputEdit(
-                                message.id.toString(),
-                                message.parts[message.parts.length - 1].text ??
-                                  ""
-                              )
-                            }
-                          >
-                            {" "}
-                            <FaPencilAlt />
-                          </button>
-                        </div>
+
+                          <div style={{ display: "flex", gap: "12px" }}>
+                              <button
+                                onClick={() =>
+                                  handleCopyMessage(
+                                    message.parts[message.parts.length - 1].text ?? ""
+                                  )
+                                }
+                                title="Copy"
+                              >
+                                <FaRegCopy />
+                              </button>
+                              <button
+                                onClick={() =>
+                                  handleMessageInputEdit(
+                                    message.id.toString(),
+                                    message.parts[message.parts.length - 1].text ?? ""
+                                  )
+                                }
+                                title="Edit"
+                              >
+                                <FaPencilAlt />
+                              </button>
+                            </div>
+
+
+
                       ))}
                   </div>
                 </>
