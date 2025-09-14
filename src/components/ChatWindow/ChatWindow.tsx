@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './ChatWindow.module.css';
 import ChatInput from '../ChatInput/ChatInput';
 import LoadingDots from '../LoadingDots/LoadingDots';
@@ -59,11 +59,24 @@ export default function ChatWindow({
 
   }
 
+// Add a ref for the bottom of the message list
+const messagesEndRef = useRef<HTMLDivElement>(null);
 
+// Add the auto-scroll effect
+useEffect(() => {
+  messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+}, [messages]);
 
   return (
     <main className={styles.window}>
+
+        <div className="flex h-full flex-col overflow-hidden">
+    
+    {/* 1. Wrap your message list in this scrolling div */}
+<div className="flex-1 overflow-y-auto px-6 pt-1 pb-10">
       <h1 className={styles.title}>What's on your mind today?</h1>
+
+
       <div className={styles.messages}>
         {messages.map((message) => (
           
@@ -122,7 +135,10 @@ export default function ChatWindow({
       )}
 
 
+      <div ref={messagesEndRef} />
 
+          </div >
+        </div>
       </div>
 
       <ChatInput

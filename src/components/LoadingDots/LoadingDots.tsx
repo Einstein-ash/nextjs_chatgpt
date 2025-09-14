@@ -1,11 +1,6 @@
 import styles from './LoadingDots.module.css';
 
 export default function LoadingDots() {
-  return (
-    <div className={styles.bouncingLoader}>
-      <div />
-      <div />
-      <div />
-    </div>
-  );
+  // The component now just returns a single div with the new style.
+  return <div className={styles.pulsingLoader} />;
 }

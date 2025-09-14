@@ -5,6 +5,7 @@ import { useChat } from '@ai-sdk/react';
 
 import Sidebar from '../components/Sidebar/Sidebar';;
 import ChatWindow from '../components/ChatWindow/ChatWindow';
+import Header from '../components/Header/Header';
 import { FaBars , FaTimes } from 'react-icons/fa'; 
 
 import '../styles/global.css';
@@ -76,6 +77,7 @@ export default function Chat() {
     setSidebarOpen(!isSidebarOpen);
   };
 
+  const headerTitle = messages.length === 0 ? " " : "";
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: 'rgb(33, 33, 33)' }}>
      <button
@@ -101,6 +103,7 @@ export default function Chat() {
       <div style={{ flex: 1, marginLeft: 0}}>
         {/* <Header /> */}
         <div style={{ marginTop: 0 ,paddingLeft: 0 }}>
+          <Header title={headerTitle} />
           <ChatWindow
           messages={messages} 
           setMessages = {setMessages}

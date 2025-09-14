@@ -2,7 +2,6 @@
 
 import { ChatInputProps, AddResponse, SearchResponse, MemoryResult } from "@/models/chat.model";
 import React, { ChangeEvent, useState } from "react";
-// import styles from "./ChatInput.module.css";
 import { FiSend } from 'react-icons/fi';
 
 const styles = `
@@ -165,6 +164,52 @@ const styles = `
 .chat-input__send-button:disabled svg {
   color: #888; 
 }
+
+
+/* --- NEW: Generic File Preview Styles --- */
+.chat-input__file-wrapper {
+  position: relative;
+  width: 160px; /* Horizontally larger */
+  height: 70px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #a93226; /* Red color */
+}
+
+.chat-input__file-preview-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  box-sizing: border-box;
+  transition: filter 0.3s ease-in-out;
+  color: white;
+}
+
+.chat-input__file-preview-content--blur {
+  filter: blur(4px);
+}
+
+.chat-input__file-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-input__file-type {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
 `;
 
 
@@ -320,7 +365,15 @@ export default function ChatInput({
   };
 
   
-  
+  // --- NEW: Helper function to get a display name for file types ---
+const getFileTypeLabel = (mimeType: string): string => {
+  if (mimeType.startsWith('video/')) return 'Video';
+  if (mimeType === 'application/pdf') return 'PDF';
+  if (mimeType.includes('wordprocessingml')) return 'DOCX'; // .docx
+  if (mimeType === 'application/msword') return 'DOC'; // .doc
+  // You can add more types here
+  return 'File';
+};
   
   return (
     <>
@@ -410,5 +463,3 @@ export default function ChatInput({
 }
 
 
-// abovce reutnr is working good, 
-// -------- below is just to test the uplaodn image grid

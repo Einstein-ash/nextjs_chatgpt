@@ -1,28 +1,18 @@
-.bouncingLoader {
-  display: flex;
-  align-items: center;
-  height: 28px;
-}
-
-.bouncingLoader > div {
-  width: 8px;
-  height: 8px;
-  margin: 0 4px;
-  background: #6a6aff;
+.pulsingLoader {
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  animation: bouncing-loader 0.6s infinite alternate;
+  background-color: white;
+  animation: pulsing-animation 0.8s ease-in-out infinite alternate;
 }
 
-.bouncingLoader > div:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.bouncingLoader > div:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes bouncing-loader {
+@keyframes pulsing-animation {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
   to {
-    opacity: 0.3;
-    transform: translateY(-8px);
+    transform: scale(0.7);
+    opacity: 0.5;
   }
 }
