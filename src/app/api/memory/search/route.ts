@@ -36,15 +36,15 @@ const memoryClient = new MemoryClient({
 
 
 
-interface SearchMemoryRequest {
-  userId: string;
-  query: string;
-  limit?: number;
-}
+// interface SearchMemoryRequest {
+//   userId: string;
+//   query: string;
+//   limit?: number;
+// }
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId, query, limit = 5 }: SearchMemoryRequest = await request.json();
+    const { userId, query, limit = 5 } = await request.json();
     
     if (!userId || !query) {
       return NextResponse.json(
@@ -62,8 +62,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      results: result.results || result || [], // Handle both v1.0 and v1.1 formats
-      total: (result.results || result || []).length
+      results: result || [], // Handle both v1.0 and v1.1 formats
+      total: (result || []).length
     });
   } catch (error) {
     console.error('Memory Search Error:', error);

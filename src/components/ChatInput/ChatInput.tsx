@@ -2,7 +2,8 @@
 
 import { ChatInputProps, AddResponse, SearchResponse, MemoryResult } from "@/models/chat.model";
 import React, { ChangeEvent, useState } from "react";
-import { FiSend } from 'react-icons/fi';
+import Image from 'next/image';
+
 
 const styles = `
 .chat-input__container {
@@ -388,7 +389,7 @@ const getFileTypeLabel = (mimeType: string): string => {
                 const imageURL = URL.createObjectURL(file);
                 return (
                   <div key={idx} className="chat-input__image-wrapper">
-                    <img
+                    <Image
                       className={`chat-input__preview-image ${
                         uploadingStatus ? "chat-input__preview-image--blur" : ""
                       }`}

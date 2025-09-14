@@ -28,22 +28,9 @@ const memoryClient = new MemoryClient({
 
 
 
-
-
-interface AddMemoryRequest {
-  userId: string;
-  memory: {
-    role: string;
-    content: string;
-  } | Array<{
-    role: string;
-    content: string;
-  }>;
-}
-
 export async function POST(request: NextRequest) {
   try {
-    const { userId, memory }: AddMemoryRequest = await request.json();
+    const { userId, memory } = await request.json();
     
     if (!userId || !memory) {
       return NextResponse.json(

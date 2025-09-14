@@ -21,11 +21,11 @@ export default function ChatWindow({
   }: Readonly<ChatWindowProps>) {
 
 
-  const [editMessageId, setEditMessageId] = useState<number | null >(null);
+  const [editMessageId, setEditMessageId] = useState<string >("");
   const [newEditMessageText, setNewEditMessageText] = useState<string>("");
   
     
-  const handleMessageInputEdit = (id:number, original_message : string) =>{
+  const handleMessageInputEdit = (id:string, original_message : string) =>{
 
     setEditMessageId(id);
     setNewEditMessageText(original_message);
@@ -33,17 +33,17 @@ export default function ChatWindow({
 
   }
 
-  const handleMessageEdit = (id : number)=>{
+  const handleMessageEdit = (id : string)=>{
     console.log("id->",id)
   
     // setMessages(my_messages.filter(message => message.id !== id));
-    setMessages((messages : ChatMessage2[] ) => {
+    setMessages((messages  ) => {
       const index = messages.findIndex((message) => message.id === id);
       if (index === -1) return messages; 
       return messages.slice(0, index);
     });
 
-      setEditMessageId(null);
+      setEditMessageId("");
 
        sendMessage({
          role: "user",
@@ -66,7 +66,10 @@ const messagesEndRef = useRef<HTMLDivElement>(null);
 // Add the auto-scroll effect
 useEffect(() => {
   messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  console.log(messages);
 }, [messages]);
+
+
 
   return (
     <main className={styles.window}>
@@ -75,11 +78,11 @@ useEffect(() => {
     
     {/* 1. Wrap your message list in this scrolling div */}
 <div className="flex-1 overflow-y-auto px-6 pt-1 pb-10">
-      <h1 className={styles.title}>What's on your mind today?</h1>
+      <h1 className={styles.title}>What &apos; s on your mind today?</h1>
 
 
       <div className={styles.messages}>
-        {messages.map((message) => (
+        {messages.map((message: { id: number; role: string; parts: any[]; }) => (
           
           <>
           
@@ -90,7 +93,7 @@ useEffect(() => {
             }`}
             >
               
-          {message.id == editMessageId ? (
+          {message.id == parseInt(editMessageId) ? (
             <div>
               <textarea
                 value={newEditMessageText}
@@ -109,12 +112,12 @@ useEffect(() => {
 
            <div className={styles.userMessageEditBtn}>
               {message.role === 'user' &&
-               (editMessageId === message.id ? (
-                 <button onClick={() => handleMessageEdit(message.id)}>   <FiSend /></button>
+               (parseInt(editMessageId)  === message.id ? (
+                 <button onClick={() => handleMessageEdit((message.id).toString())}>   <FiSend /></button>
                )
                :(
                 <div>
-                  <button onClick={() => handleMessageInputEdit(message.id , message.parts[0].text ?? '')}> <FaPencilAlt /></button>
+                  <button onClick={() => handleMessageInputEdit((message.id).toString() , message.parts[0].text ?? '')}> <FaPencilAlt /></button>
                 </div>
                ))
             }

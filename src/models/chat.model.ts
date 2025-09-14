@@ -1,5 +1,6 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { UIMessage, UseChatHelpers } from '@ai-sdk/react'; 
+import { UIDataTypes, UITools } from 'ai';
 
 export interface Attachment {
   url: string;
@@ -41,8 +42,8 @@ export interface AddResponse {
 export interface ChatInputProps {
   input: string;
   setInput: (input: string) => void;
-  sendMessage: (message: ChatMessage2) => void;
-  fileInputRef: React.RefObject<HTMLInputElement> ;
+  sendMessage: (message: any) => void;
+  fileInputRef: React.RefObject<HTMLInputElement | null > ;
   handleFileChange: (e: ChangeEvent<HTMLInputElement>) => Promise<boolean>;
   attachments: Attachment[];
 }
@@ -62,19 +63,19 @@ export interface ChatMessage2 {
 }
 
 export interface ChatWindowProps {
-  messages: ChatMessage2[];
+  messages: any;
   input: string;
   setInput: (input: string) => void;
-  sendMessage: (message: ChatMessage2) => void;
-  fileInputRef: React.RefObject<HTMLInputElement>;
+  sendMessage: (message:  any ) => void;
+  fileInputRef: React.RefObject<HTMLInputElement | null >  ;
   handleFileChange: (e: ChangeEvent<HTMLInputElement>) => Promise<boolean>;
   attachments: Attachment[];
   // setMessages: (messages: ChatMessage2[]) => void;
-  setMessages: Dispatch<SetStateAction<ChatMessage2[]>>;
+  setMessages: Dispatch<SetStateAction<UIMessage<unknown, UIDataTypes, UITools>[]>>;
 }
 
 export interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
-  setMessages: Dispatch<SetStateAction<ChatMessage2[]>>;
+  setMessages: Dispatch<SetStateAction<UIMessage<unknown, UIDataTypes, UITools>[]>>;
 }
