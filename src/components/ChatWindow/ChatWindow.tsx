@@ -2,11 +2,36 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './ChatWindow.module.css';
-import ChatInput from '../ChatInput/ChatInput';
 import LoadingDots from '../LoadingDots/LoadingDots';
 import { FaPencilAlt } from 'react-icons/fa';
 import { FiSend } from 'react-icons/fi';
-import { ChatMessage2, ChatWindowProps } from '@/models/chat.model';
+import { ChatWindowProps } from '@/models/chat.model';
+import ReactMarkdown, { Components } from 'react-markdown'; 
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+
+const MarkdownComponents: Components = {
+  code({ node, className, children, ...props }) {
+    const match = /language-(\w+)/.exec(className || '');
+    return match ? (
+
+      <SyntaxHighlighter
+        style={vscDarkPlus as any }
+        language={match[1]}
+        PreTag="div"
+
+      >
+        {String(children).replace(/\n$/, '')}
+      </SyntaxHighlighter>
+    ) : (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    );
+  }
+};
 
 
 export default function ChatWindow({
@@ -34,7 +59,6 @@ export default function ChatWindow({
   }
 
   const handleMessageEdit = (id : string)=>{
-    // setMessages(my_messages.filter(message => message.id !== id));
     setMessages((messages  ) => {
       const index = messages.findIndex((message) => message.id === id);
       if (index === -1) return messages; 
@@ -58,7 +82,7 @@ export default function ChatWindow({
 
 const messagesEndRef = useRef<HTMLDivElement>(null);
 
-// Add the auto-scroll effect
+
 useEffect(() => {
   messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 }, [messages]);
@@ -70,7 +94,6 @@ useEffect(() => {
 
         <div className="flex h-full flex-col overflow-hidden">
     
-    {/* 1. Wrap your message list in this scrolling div */}
 <div className="flex-1 overflow-y-auto px-6 pt-1 pb-10">
       <h1 className={styles.title}>What &apos; s on your mind today?</h1>
 
@@ -98,7 +121,59 @@ useEffect(() => {
           ) : (
             message.parts.map((part, i) =>
               part.type === 'text' ? (
-                <span key={i}>{part.text}</span>
+
+                // ---------simmple -------------
+                // <span key={i}>{part.text}</span>
+
+
+
+                // ----------- text improvements --------------
+                // <div key={i} className="prose">
+                //   <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                //     {part.text}
+                //   </ReactMarkdown>
+                // </div>
+
+                // -------- try to code miprove ----(worked but with warning ) --------
+                  // <div key={i} className="prose max-w-none text-inherit prose-p:my-0">
+                  //         {/* ✨ 2. ADD THE CUSTOM `components` PROP */}
+                  //         <ReactMarkdown
+                  //           remarkPlugins={[remarkGfm]}
+                  //           components={{
+                  //             code(props) {
+                  //               const { children, className, node, ...rest } = props
+                  //               const match = /language-(\w+)/.exec(className || '')
+                  //               return match ? (
+                  //                 <SyntaxHighlighter
+                  //                   {...rest}
+                  //                   PreTag="div"
+                  //                   children={String(children).replace(/\n$/, '')}
+                  //                   language={match[1]}
+                  //                   style={vscDarkPlus}
+                  //                 />
+                  //               ) : (
+                  //                 <code {...rest} className={className}>
+                  //                   {children}
+                  //                 </code>
+                  //               )
+                  //             }
+                  //           }}
+                  //         >
+                  //           {part.text}
+                  //         </ReactMarkdown>
+                  //       </div>
+
+                  // ----------- muved component logic outside ----------
+
+                <div key={i} className="prose max-w-none text-inherit prose-p:my-0">
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            components={MarkdownComponents} 
+                          >
+                            {part.text}
+                          </ReactMarkdown>
+                        </div>
+
               ) : null
             )
           )}
@@ -136,15 +211,6 @@ useEffect(() => {
           </div >
         </div>
       </div>
-
-      {/* <ChatInput
-                input={input}
-                setInput={setInput}
-                sendMessage={sendMessage}
-                fileInputRef={fileInputRef}
-                handleFileChange={handleFileChange}
-                attachments={attachments}
-      /> */}
     </main>
   );
 }

@@ -364,13 +364,12 @@ export default function ChatInput({
     }
   };
 
-  
-  // --- NEW: Helper function to get a display name for file types ---
+
 const getFileTypeLabel = (mimeType: string): string => {
   if (mimeType.startsWith('video/')) return 'Video';
   if (mimeType === 'application/pdf') return 'PDF';
-  if (mimeType.includes('wordprocessingml')) return 'DOCX'; // .docx
-  if (mimeType === 'application/msword') return 'DOC'; // .doc
+  if (mimeType.includes('wordprocessingml')) return 'DOCX'; 
+  if (mimeType === 'application/msword') return 'DOC'; 
   // You can add more types here
   return 'File';
 };
@@ -395,6 +394,8 @@ const getFileTypeLabel = (mimeType: string): string => {
                       src={imageURL}
                       alt={`upload-preview-${idx}`}
                       onLoad={() => URL.revokeObjectURL(imageURL)}
+                       width={300} 
+                       height={200} 
                       />
                     {uploadingStatus && (
                       <div className="chat-input__spinner-overlay">
