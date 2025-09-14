@@ -117,7 +117,7 @@ useEffect(() => {
                )
                :(
                 <div>
-                  <button onClick={() => handleMessageInputEdit((message.id).toString() , message.parts[0].text ?? '')}> <FaPencilAlt /></button>
+                  <button onClick={() => handleMessageInputEdit((message.id).toString() , message.parts[message.parts.length - 1].text ?? '')}> <FaPencilAlt /></button>
                 </div>
                ))
             }
